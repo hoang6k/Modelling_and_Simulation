@@ -19,6 +19,6 @@ solve Poisson(u, v, solver=LU) =
             dx(u) * dx(v) + dy(u) * dy(v)
         )
         + int2d(Th)(f * v)
-        + on(C, u=0);
+        + on(C, u = 0);
 
 plot(u, wait=true, value=true, fill=true);

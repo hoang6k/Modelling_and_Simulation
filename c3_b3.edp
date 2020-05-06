@@ -1,23 +1,25 @@
 bool debug = true;
 
-int n = 50, C = 1;
+int n = 50;
 
-border C1(t=0, pi){x=t; y=0; label=C;};
-border C2(t=pi, 0){x=t; y=pi-t; label=C;};
-border C3(t=pi, 0){x=0; y=t; label=C;};
-mesh Th = buildmesh(C1(n) + C2(n) + C3(n));
+border C(t=0, 2 * pi){x=cos(t); y=sin(t);};
+mesh Th = buildmesh(C(n));
 
 plot(Th, wait=debug);
 
 fespace Vh(Th, P1);
 Vh u, v;
-func f = -2 * sin(x + y);
+func f = 1;
+func sigma = 1;
+func g = 0;
 
 solve Poisson(u, v, solver=LU) = 
         int2d(Th)(
             dx(u) * dx(v) + dy(u) * dy(v)
         )
+        + int1d(Th)(sigma * u * v)
         + int2d(Th)(f * v)
+        - int1d(Th)(g * v)
         + on(C, u = 0);
 
 plot(u, wait=true, value=true, fill=true);
