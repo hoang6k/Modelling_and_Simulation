@@ -1,9 +1,11 @@
 bool debug = true;
 
-int n = 50;
+int n = 100;
 
 border C(t=0, 2 * pi){x=cos(t); y=sin(t);};
 mesh Th = buildmesh(C(n));
+savemesh(Th, "mesh/c3b3.msh");
+// mesh Th = readmesh("c3b3.msh");
 
 plot(Th, wait=debug);
 

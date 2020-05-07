@@ -1,0 +1,31 @@
+load "ppm2rnm"
+load "isoline"
+
+bool debug = true;
+// Parameters
+string lake = "lake.pgm";
+
+real hsize = 5;
+real[int, int] Curves(3, 1);
+int[int] be(1);
+int nc; //nb of curve
+{
+    real[int, int] ff1(lake); //read image
+    //and set it in a rect. array
+    int nx = ff1.n, ny = ff1.m;
+    //build a Cartesian mesh such that the origin is in the right place.
+    mesh Th = square(nx-1, ny-1, [(nx-1)*(x), (ny-1)*(1-y)]);
+    //warning the numbering of the vertices (x,y) is
+    //given by $i = x/nx + nx* y/ny $
+    fespace Vh(Th, P1);
+    Vh f1;
+    f1[] = ff1; //transform array in finite element functions.
+    nc = isoline(Th, f1, iso=0.25, close=1, Curves, beginend=be, smoothing=.1, ratio=0.5);
+}
+//The longest isoline: the lake
+int ic0 = be(0), ic1 = be(1) - 1;
+plot([Curves(0, ic0:ic1), Curves(1, ic0:ic1)], wait=true);
+int NC = Curves(2, ic1) / hsize;
+border G(t=0, 1){P=Curve(Curves, ic0, ic1, t);}
+mesh Th = buildmesh(G(NC));
+plot(Th, wait=true, ps="mesh/lake.msh");
