@@ -1,0 +1,86 @@
+real E = 21e5;
+real nu = 0.28;
+
+real f = -1e4;
+
+int Cs = 1, Cun = 2, Cup = 3, Ccol = 4, step;
+int n = 5;
+bool debug = true;
+
+// Mesh
+step = 0;
+border C1(t=0, 1){x=2*t; y=0; label=Cs;}
+border C2(t=0, 1){x=3*t+2; y=2.1*t; label=Cun;}
+
+step += 5;
+border C3(t=0, 1){x=step; y=2.1*(1-t); label=Ccol;}
+border C4(t=0, 1){x=t+step; y=0; label=Cs;}
+border C5(t=0, 1){x=step+1; y=2.8*t; label=Ccol;}
+border C6(t=0, 1){x=4*t+step+1; y=2.8*t+2.8; label=Cun;}
+
+step += 5;
+border C7(t=0, 1){x=step; y=5.6*(1-t); label=Ccol;}
+border C8(t=0, 1){x=t+step; y=0; label=Cs;}
+border C9(t=0, 1){x=step+1; y=5.6*t; label=Ccol;}
+border C10(t=0, 1){x=4*t+step+1; y=5.6; label=Cun;}
+
+step += 5;
+border C11(t=0, 1){x=step; y=5.6*(1-t); label=Ccol;}
+border C12(t=0, 1){x=t+step; y=0; label=Cs;}
+border C13(t=0, 1){x=step+1; y=5.6*t; label=Ccol;}
+border C14(t=0, 1){x=4*t+step+1; y=5.6; label=Cun;}
+
+step += 5;
+border C15(t=0, 1){x=step; y=5.6*(1-t); label=Ccol;}
+border C16(t=0, 1){x=t+step; y=0; label=Cs;}
+border C17(t=0, 1){x=step+1; y=5.6*t; label=Ccol;}
+border C18(t=0, 1){x=4*t+step+1; y=5.6; label=Cun;}
+
+step += 5;
+border C19(t=0, 1){x=step; y=5.6*(1-t); label=Ccol;}
+border C20(t=0, 1){x=t+step; y=0; label=Cs;}
+border C21(t=0, 1){x=step+1; y=5.6*t; label=Ccol;}
+border C22(t=0, 1){x=4*t+step+1; y=5.6; label=Cun;}
+
+step += 5;
+border C23(t=0, 1){x=step; y=5.6*(1-t); label=Ccol;}
+border C24(t=0, 1){x=t+step; y=0; label=Cs;}
+border C25(t=0, 1){x=step+1; y=5.6*t; label=Ccol;}
+border C26(t=0, 1){x=4*t+step+1; y=5.6; label=Cun;}
+
+step += 5;
+border C27(t=0, 1){x=step; y=5.6*(1-t); label=Ccol;}
+border C28(t=0, 1){x=t+step; y=0; label=Cs;}
+border C29(t=0, 1){x=step+1; y=5.6*t; label=Ccol;}
+border C30(t=0, 1){x=4*t+step+1; y=5.6; label=Cun;}
+
+step += 5;
+border C31(t=0, 1){x=step; y=5.6*(1-t); label=Ccol;}
+border C32(t=0, 1){x=t+step; y=0; label=Cs;}
+border C33(t=0, 1){x=step+1; y=5.6*t; label=Ccol;}
+border C34(t=0, 1){x=4*t+step+1; y=-2.8*t+5.6; label=Cun;}
+
+step += 5;
+border C35(t=0, 1){x=step; y=2.8*(1-t); label=Ccol;}
+border C36(t=0, 1){x=t+step; y=0; label=Cun;}
+border C37(t=0, 1){x=step+1; y=2.1*t; label=Ccol;}
+border C38(t=0, 1){x=3*t+step+1; y=2.1*(1-t); label=Cun;}
+
+step += 4;
+border C39(t=0, 1){x=2*t+step; y=0; label=Cs;}
+border C40(t=0, 1){x=-10*t+51; y=7*t; label=Cup;}
+border C41(t=0, 1){x=-31*t+41; y=7; label=Cup;}
+border C42(t=0, 1){x=10*(1-t); y=7*(1-t); label=Cup;}
+
+mesh Th = buildmesh(C1(2*n) + C2(4*n) + C3(2*n) + C4(n) + C5(3*n) + C6(4*n)
+                    + C7(6*n) + C8(n) + C9(6*n) + C10(4*n)
+                    + C11(6*n) + C12(n) + C13(6*n) + C14(4*n)
+                    + C15(6*n) + C16(n) + C17(6*n) + C18(4*n)
+                    + C19(6*n) + C20(n) + C21(6*n) + C22(4*n)
+                    + C23(6*n) + C24(n) + C25(6*n) + C26(4*n)
+                    + C27(6*n) + C28(n) + C29(6*n) + C30(4*n)
+                    + C31(6*n) + C32(n) + C33(6*n) + C34(4*n)
+                    + C35(3*n) + C36(n) + C37(2*n) + C38(4*n)
+                    + C39(2*n) + C40(12*n) + C41(31*n) + C42(12*n));
+
+plot(Th, wait=debug);

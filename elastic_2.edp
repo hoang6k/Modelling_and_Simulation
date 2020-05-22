@@ -1,0 +1,54 @@
+real E = 21e5;
+real nu = 0.28;
+
+real f = -1e4;
+
+int Cs = 1, Cd = 2;
+int n = 100;
+bool debug = true;
+
+// Mesh
+border C1(t=0, 1){x=(2-sqrt(5./3))*t-2; y=0; label=Cs;}
+border C2(t=0, pi){x=sqrt(5/3.)*cos(t); y=sqrt(10.)*sin(t); label=Cd;}
+border C3(t=0, 1){x=(2-sqrt(5./3))*t+sqrt(5./3); y=0; label=Cs;}
+border C4(t=0, pi){x=2*cos(t); y=4*sin(t); label=Cd;}
+
+// mesh Th = buildmesh(C2(-n) + C4(n));
+mesh Th = buildmesh(C1(n/10) + C2(-n) + C3(n/10) + C4(n));
+
+plot(Th, wait=debug);
+
+// Fespace
+fespace Vh(Th, P2);
+Vh u, v;
+Vh uu, vv;
+
+// Macro
+real sqrt2=sqrt(2.);
+macro epsilon(u1, u2) [dx(u1), dy(u2), (dy(u1) + dx(u2)) / sqrt2] //
+// The sqrt2 is because we want: epsilon(u1,u2)'* epsilon(v1,v2) = epsilon(u):epsilon(v)
+macro div(u, v) (dx(u) + dy(v)) //
+
+// Problem
+real mu = E / (2 * (1 + nu));
+real lambda = E * nu / ((1 + nu) * (1 - 2 * nu));
+
+solve lame([u, v], [uu, vv])
+	= int2d(Th)(
+		lambda * div(u, v) * div(uu, vv)
+		+ 2.*mu * (epsilon(u, v)' * epsilon(uu, vv))
+	)
+	- int2d(Th)(
+		f * vv
+	)
+	+ on(Cs, u=0, v=0);
+
+// Plot
+real coef=15;
+plot([u, v], wait=true, coef=coef, fill=true, value=true);
+// plot([u, v], wait=true, ps="lamevect.eps", coef=coef, fill=true);
+
+// Move mesh
+mesh th1 = movemesh(Th, [x + u * coef, y + v * coef]);
+plot(th1, wait=true);
+// plot(th1, wait=true, ps="lamedeform.eps");
