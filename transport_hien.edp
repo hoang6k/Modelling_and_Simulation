@@ -1,0 +1,27 @@
+// Luu y can dat thoi gian va van toc nho de thay phuong phap hoat dong dung
+
+real dt = 0.01;
+
+// Mesh
+border C(t=0., 2.* pi) {x=cos(t); y=sin(t);};
+mesh Th = buildmesh(C(100));
+// mesh Th = square(50, 50, [8*x-4, 8*y-4]);
+
+fespace Uh(Th, P2);
+Uh phi, cold, c = exp(-10*((x-0.3)^2 +(y-0.3)^2));
+// Uh phi, cold, c = sqrt((x-0.3)^2 + (y-0.3)^2) - 0.01;
+Uh u1 = y, u2 = -x;
+
+problem transport(c, phi) =
+    int2d(Th)(c*phi / dt)
+    + int2d(Th)((u1*dx(cold) + u2*dy(cold)) * phi)
+    - int2d(Th)(cold*phi / dt);
+
+// Time loop
+real t = 0;
+for (int m = 0; m < 2.* pi/dt; m++){
+    t += dt;
+    cold = c;
+    transport;
+    plot(c, cmm=" t="+t +", min="+c[].min+", max="+c[].max, nbiso=3);
+}
