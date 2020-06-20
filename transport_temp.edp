@@ -1,0 +1,28 @@
+// real dt = 0.2;
+
+// // Mesh
+// // border C(t=0., 2.* pi){x=5*cos(t); y=5*sin(t); label=1;};
+// // mesh Th = buildmesh(C(200));
+// mesh Th = square(50, 50, [8*x-4, 8*y-4]);
+// plot(Th, wait=true);
+
+// // Fespace
+// fespace Vh(Th, P2);
+// Vh u, v, uold;
+// // Vh u1 = 0.4, u2 = 0.3;
+// Vh u1 = y, u2 = -x;
+
+// problem T(u,v) = int2d(Th)(u*v) - int2d(Th)(convect([u1,u2], -dt, uold)*v)
+//         + on(1,2,3,4, u=0);
+
+// // uold = exp(-10*((x-0.3)^2 +(y-0.3)^2));
+// uold = sqrt(x^2 + y^2) - 0.01;
+// plot(uold, nbiso=3);
+
+// // Time loop
+// real t = 0;
+// for (int m = 0; m < 2.* pi/dt; m++){
+//     T;
+//     uold = u;
+//     plot(u, fill=false, value=true, nbiso=3);
+// }
